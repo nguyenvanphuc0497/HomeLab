@@ -1,0 +1,45 @@
+# OS / Editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Secrets / Env
+.env
+.env.*
+secrets/*
+
+# Python / Virtualenv (if used later)
+__pycache__/
+.venv/
+venv/
+
+# Node (if used for tooling)
+node_modules/
+*.log
+
+# Terraform (future IaC)
+.terraform/
+terraform.tfstate
+terraform.tfstate.backup
+crash.log
+*.tfvars
+*.tfvars.json
+
+# Ansible (future IaC)
+*.retry
+
+# Docker / Compose
+docker-compose.override.yml
+compose.override.yml
+*.pid
+
+# Mac metadata
+.Spotlight-V100
+.Trashes
+
+# Local artifacts
+tmp/
+dist/
+build/
+

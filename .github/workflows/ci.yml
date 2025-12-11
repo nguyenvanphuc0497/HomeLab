@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  bootstrap:
+    name: Bootstrap
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Show repo status
+        run: |
+          git status -sb
+          ls -la
+
+  markdown-lint:
+    name: Markdown lint
+    runs-on: ubuntu-latest
+    if: ${{ hashFiles('**/*.md') != '' }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install markdownlint
+        run: npm install -g markdownlint-cli
+      - name: Lint markdown
+        run: markdownlint "**/*.md" --disable MD013 MD033
+
+  yaml-lint:
+    name: YAML lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install yamllint
+        run: pip install --quiet yamllint
+      - name: Lint YAML (relaxed)
+        run: yamllint -d "{extends: relaxed, rules: {line-length: disable}}" .
+
+  compose-validate:
+    name: Validate Docker Compose (if present)
+    runs-on: ubuntu-latest
+    if: ${{ hashFiles('services/**/docker-compose.yml') != '' }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate Compose files
+        run: |
+          find services -name "docker-compose.yml" -print -exec docker compose -f {} config \;

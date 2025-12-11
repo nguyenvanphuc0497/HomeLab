@@ -1,6 +1,6 @@
 # 🏠 HomeLab Infrastructure
 
-![Status](https://img.shields.io/badge/Status-Building-orange?style=for-the-badge)
+![Status](https://img.shields.io/badge/Status-Foundation%20Phase-orange?style=for-the-badge)
 ![CI/CD](https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-blue?style=for-the-badge&logo=githubactions)
 ![Infrastructure](https://img.shields.io/badge/Infrastructure-Docker%20%26%20Proxmox-blueviolet?style=for-the-badge)
 
@@ -15,6 +15,25 @@ This lab operates on a **Hybrid GitOps** model:
 2. **Backup Strategy:** Automated mirroring to a self-hosted **Gitea** instance (running on Raspberry Pi 4).
 3. **Deployment:** Continuous Deployment (CD) via self-hosted **GitHub Actions Runners** executing directly on physical nodes.
 
+#### High-level topology (WIP)
+```mermaid
+graph LR
+  Dev[Workstation] -->|git push| GitHub[(GitHub)]
+  GitHub -->|mirror| Gitea[(Gitea on Pi4)]
+  GitHub -->|CI/CD| Runner[Self-hosted GA Runner on Pi4]
+  Runner -->|SSH| Pi5[Pi 5 - Compute Node]
+  Runner -->|Sync| Proxmox[Proxmox VE - NUC]
+  Pi5 -->|Docker/Compose| Services[Media/Tools Containers]
+  Proxmox -->|VM| HAOS[Home Assistant]
+```
+
+### Repository Structure (planned)
+- `infra/` — Proxmox, network, DNS, backup IaC (Terraform/Ansible, future)
+- `services/` — Docker Compose stacks (media, tools, dashboards)
+- `runner/` — Self-hosted GitHub Actions runner setup scripts
+- `scripts/` — Bootstrap and maintenance helpers (backup, mirror sync)
+- `docs/` — Runbooks, architecture notes, incident log
+
 ## 🏗️ Hardware Inventory
 
 | Device             | Role                | Specs             | OS             | Primary Services                        |
@@ -26,30 +45,55 @@ This lab operates on a **Hybrid GitOps** model:
 | **PC Desktop**     | Workstation         | Core i5, 16GB RAM | Ubuntu / Win10 | Development, AI Training, Staging       |
 
 ## 🚀 Roadmap
-
 ### Phase 1: Foundation 🚧
 - [x] Initialize `homelab` repository on GitHub.
-- [ ] Configure **SSH Key Pairs** for passwordless communication between nodes.
-- [ ] Deploy **Gitea** on Raspberry Pi 4 (via Docker Compose).
-- [ ] Setup **Repo Mirroring** (GitHub -> Gitea) for automated backup.
+- [ ] Configure **SSH key pairs** for passwordless ops between nodes (Pi4, Pi5, NUC).
+- [ ] Deploy **Gitea** on Raspberry Pi 4 (Docker Compose).
+- [ ] Setup **repo mirroring** (GitHub -> Gitea) + scheduled sync.
 
 ### Phase 2: Automation Pipelines ⚙️
-- [ ] Provision **GitHub Actions Self-hosted Runner** on Raspberry Pi 4.
-- [ ] Author basic `deploy.yml` workflow:
-    - [ ] Trigger on push to `main` branch.
-    - [ ] SSH tunneling from Runner to Compute Node (Pi 5).
-    - [ ] Execute Docker update commands.
+- [ ] Provision **GitHub Actions self-hosted runner** on Raspberry Pi 4.
+- [ ] Add `deploy.yml`:
+  - [ ] Trigger on push to `main`.
+  - [ ] SSH to Pi5 via runner, pull repo, run `docker compose` updates.
+  - [ ] Post-deploy smoke check (container health or HTTP 200).
 
 ### Phase 3: Migration & Standardization 📦
-- [ ] Audit existing container configurations on Raspberry Pi 5.
-- [ ] Refactor ad-hoc `docker run` commands into `docker-compose.yml` files.
-- [ ] Commit service definitions to `services/` directory.
-- [ ] Integrate Home Assistant configuration into version control.
+- [ ] Audit existing containers on Pi5.
+- [ ] Convert ad-hoc `docker run` to `docker-compose.yml` under `services/`.
+- [ ] Add env/secret handling (`.env` template + sops/age for secrets).
+- [ ] Version Home Assistant configuration (sensitive data excluded/encrypted).
 
 ### Phase 4: Monitoring & Security 🛡️
-- [ ] Deploy **Uptime Kuma** for service health monitoring.
-- [ ] Setup centralized Dashboard (Homepage/Heimdall).
-- [ ] Configure alert notifications (Telegram/Discord) for build failures.
+- [ ] Deploy **Uptime Kuma** to watch critical services.
+- [ ] Centralized dashboard (Homepage/Heimdall) with links/status.
+- [ ] Alerts to Telegram/Discord for build failures and health checks.
+- [ ] Baseline hardening: SSH config, fail2ban/ufw, periodic backup verify.
+
+### Phase 5: Observability (stretch) 📊
+- [ ] Metrics/logs pipeline (Prometheus/Grafana or lightweight alternative).
+- [ ] Long-term retention for key logs/metrics on cheap storage.
+
+## 🚦 Getting Started (WIP)
+Prereqs: Docker & Docker Compose on target nodes, SSH access, GitHub PAT (for mirror), age keypair (if using sops).
+
+Suggested flow:
+1) Clone: `git clone https://github.com/<you>/homelab`
+2) SSH keys: generate and distribute to Pi4/Pi5/NUC; restrict to commands if needed.
+3) Gitea: deploy `services/gitea/docker-compose.yml` (once added), configure mirror from GitHub.
+4) Runner: bootstrap `runner/` script to register self-hosted runner with repo org.
+5) Deploy stacks: `docker compose -f services/<stack>/docker-compose.yml up -d`
+
+## 🔒 Security & Secrets
+- Store CI secrets in GitHub Actions secrets; avoid committing plaintext.
+- Prefer **sops + age** for encrypting `.env` / YAML values in Git.
+- Limit SSH access; consider command/host restrictions for deploy keys.
+- Backup strategy: Gitea mirror + Proxmox snapshots + offsite/USB copy (planned).
+
+## 📡 Monitoring & Alerting
+- Uptime Kuma for HTTP/TCP checks and alerts (Telegram/Discord).
+- Add simple smoke tests post-deploy in CI to fail fast.
+- Optional: Prometheus/Grafana stack for metrics if resources allow.
 
 ## 🛠️ Tech Stack
 
