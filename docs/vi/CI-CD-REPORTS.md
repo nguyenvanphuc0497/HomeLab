@@ -213,5 +213,8 @@ GitHub Mobile App cho phép:
 
 ---
 
-**Xem thêm:** [`.github/workflows/README.md`](../.github/workflows/README.md)
+**Xem thêm:**
+- [`.github/workflows/README.md`](../../.github/workflows/README.md)
+- [Tài liệu tiếng Anh](../en/CI-CD-REPORTS.md)
+- [Mục lục tài liệu](../README.md)
 
