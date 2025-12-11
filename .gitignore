@@ -1,45 +1,55 @@
-# OS / Editor
+# Environment files (contain secrets)
+.env
+.env.local
+.env.*.local
+*.env
+
+# Docker
+.docker/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Backup files
+*.bak
+*.backup
+
+# OS
 .DS_Store
 Thumbs.db
-.idea/
-.vscode/
 
-# Secrets / Env
-.env
-.env.*
-secrets/*
-
-# Python / Virtualenv (if used later)
-__pycache__/
-.venv/
-venv/
-
-# Node (if used for tooling)
-node_modules/
-*.log
-
-# Terraform (future IaC)
+# Terraform (if used)
 .terraform/
-terraform.tfstate
-terraform.tfstate.backup
-crash.log
-*.tfvars
-*.tfvars.json
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
 
-# Ansible (future IaC)
+# Ansible (if used)
 *.retry
+.vault_pass
 
-# Docker / Compose
-docker-compose.override.yml
-compose.override.yml
-*.pid
+# Secrets
+secrets/
+*.key
+*.pem
+*.crt
+id_rsa*
+*.age
 
-# Mac metadata
-.Spotlight-V100
-.Trashes
-
-# Local artifacts
-tmp/
-dist/
-build/
-
+# Local test files
+test-local/
+.local/

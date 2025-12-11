@@ -40,11 +40,13 @@ jobs:
         run: yamllint -d "{extends: relaxed, rules: {line-length: disable}}" .
 
   compose-validate:
-    name: Validate Docker Compose (if present)
+    name: Validate Docker Compose
     runs-on: ubuntu-latest
-    if: ${{ hashFiles('services/**/docker-compose.yml') != '' }}
     steps:
       - uses: actions/checkout@v4
-      - name: Validate Compose files
+      - name: Setup Docker Compose
         run: |
-          find services -name "docker-compose.yml" -print -exec docker compose -f {} config \;
+          docker compose version
+      - name: Validate all Compose files
+        run: |
+          bash scripts/validate-compose.sh || exit 1

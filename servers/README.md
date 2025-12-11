@@ -80,6 +80,18 @@ make ps     # List running containers
 
 Each server includes a `Makefile` with common operations:
 
+### Validation & Testing (MacBook/Local)
+
+| Command | Description |
+|---------|-------------|
+| `make check` | Validate docker-compose.yml syntax (works without .env) |
+| `make dry-run` | Preview what would be deployed (no actual deploy) |
+| `make test-deploy` | **Test deploy with platform emulation** (MacBook) |
+| `make test-down` | Stop test containers after test-deploy |
+| `make pull-test` | Pull images for target platform (emulation) |
+
+### Production Deployment (Server)
+
 | Command | Description |
 |---------|-------------|
 | `make deploy` | Pull images + start containers (recommended) |
@@ -89,7 +101,6 @@ Each server includes a `Makefile` with common operations:
 | `make logs` | Follow logs (last 100 lines) |
 | `make ps` | List running containers |
 | `make restart` | Restart all services |
-| `make check` | Validate docker-compose.yml syntax |
 
 ### Custom Compose File
 
@@ -97,6 +108,56 @@ To use a different compose file:
 
 ```bash
 make deploy STACK=custom-compose.yml
+make test-deploy STACK=custom-compose.yml PLATFORM=linux/arm64
+```
+
+## 🧪 Testing on MacBook (Development)
+
+You can test deployments on your MacBook **even if the platform differs** (e.g., testing ARM64 compose files on Intel Mac):
+
+### 1. Preview Deployment (Dry Run)
+
+```bash
+cd servers/raspi5
+make dry-run
+```
+
+Shows:
+- Services that would be deployed
+- Images that would be pulled
+- Validates configuration syntax
+
+### 2. Test Deploy (With Platform Emulation)
+
+```bash
+cd servers/raspi5
+make test-deploy    # Deploys with ARM64 emulation
+make logs           # Check logs
+make test-down      # Clean up when done
+```
+
+**How it works:**
+- Uses Docker's platform emulation (`DOCKER_DEFAULT_PLATFORM`)
+- Pulls ARM64 images even on Intel Mac (via QEMU)
+- Containers run with emulation (slower, but functional for testing)
+
+**Requirements:**
+- Docker Desktop with emulation enabled (usually automatic)
+- `.env` file (copy from `env.example` for testing)
+
+### 3. Using Test Script
+
+From repo root:
+
+```bash
+# Preview
+./scripts/test-deploy.sh raspi5 dry-run
+
+# Test deploy (with confirmation)
+./scripts/test-deploy.sh raspi5 test-deploy
+
+# Clean up
+./scripts/test-deploy.sh raspi5 test-down
 ```
 
 ## 🏗️ Architecture-Specific Notes

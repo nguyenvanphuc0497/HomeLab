@@ -74,15 +74,60 @@ graph LR
 - [ ] Metrics/logs pipeline (Prometheus/Grafana or lightweight alternative).
 - [ ] Long-term retention for key logs/metrics on cheap storage.
 
-## 🚦 Getting Started (WIP)
-Prereqs: Docker & Docker Compose on target nodes, SSH access, GitHub PAT (for mirror), age keypair (if using sops).
+## 🚦 Getting Started
 
-Suggested flow:
-1) Clone: `git clone https://github.com/<you>/homelab`
-2) SSH keys: generate and distribute to Pi4/Pi5/NUC; restrict to commands if needed.
-3) Gitea: deploy `services/gitea/docker-compose.yml` (once added), configure mirror from GitHub.
-4) Runner: bootstrap `runner/` script to register self-hosted runner with repo org.
-5) Deploy stacks: `docker compose -f services/<stack>/docker-compose.yml up -d`
+### Development (MacBook/Local)
+
+**Prerequisites:**
+- Docker Desktop (Mac) or Docker Engine
+- Git
+
+**Workflow:**
+1. **Clone repository:**
+   ```bash
+   git clone https://github.com/<you>/homelab
+   cd homelab
+   ```
+
+2. **Validate compose files** (before committing):
+   ```bash
+   make validate-compose  # Validates syntax on any platform
+   ```
+
+3. **Test deployment** (optional, with platform emulation):
+   ```bash
+   cd servers/raspi5
+   make dry-run        # Preview what would be deployed
+   make test-deploy    # Actually deploy (ARM64 emulation on Mac)
+   make logs           # Check logs
+   make test-down      # Clean up
+   ```
+
+4. **Run linters:**
+   ```bash
+   make lint  # Markdown + YAML linting
+   ```
+
+5. **Full validation:**
+   ```bash
+   make test  # Runs all checks
+   ```
+
+**Note:** 
+- Validation works cross-platform - checks syntax without needing matching architecture
+- Test deploy uses Docker platform emulation - you can test ARM64 compose files on Intel/Apple Silicon Macs
+- See [`servers/README.md`](servers/README.md) for detailed testing workflow
+
+### Deployment (Servers)
+
+**Prerequisites:** Docker & Docker Compose on target nodes, SSH access, GitHub PAT (for mirror), age keypair (if using sops).
+
+**Suggested flow:**
+1. **SSH keys:** Generate and distribute to Pi4/Pi5/NUC; restrict to commands if needed.
+2. **Environment setup:** Copy `env.example` to `.env` on each server, fill in values.
+3. **Gitea:** Deploy `services/gitea/docker-compose.yml` (once added), configure mirror from GitHub.
+4. **Runner:** Bootstrap `runner/` script to register self-hosted runner with repo org.
+5. **Deploy stacks:** `cd servers/<server> && make deploy`
 
 ## 🔒 Security & Secrets
 - Store CI secrets in GitHub Actions secrets; avoid committing plaintext.
