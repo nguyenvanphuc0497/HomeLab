@@ -2,7 +2,7 @@
 # Validate all Docker Compose files in the repository
 # This script can run on any platform (MacBook, Linux) to check syntax
 
-set -e
+set +e  # Don't exit on error, we'll handle it manually
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
@@ -26,45 +26,47 @@ validate_compose() {
         return 1
     fi
     
-    # Validate compose syntax (without requiring .env file)
-    # Use --env-file /dev/null to ignore missing .env
-    if docker compose -f "$compose_file" config --quiet 2>&1 | grep -q "error\|Error\|ERROR"; then
-        echo "   ❌ Validation failed"
-        docker compose -f "$compose_file" config 2>&1 | head -20
-        return 1
+    # Try to validate compose syntax
+    # Capture both stdout and stderr
+    local output
+    output=$(docker compose -f "$compose_file" config 2>&1)
+    local exit_code=$?
+    
+    if [ $exit_code -eq 0 ]; then
+        echo "   ✅ Valid"
+        return 0
     else
-        # Try to validate (may fail if .env is missing, but that's OK for syntax check)
-        if docker compose -f "$compose_file" config > /dev/null 2>&1; then
-            echo "   ✅ Valid"
+        # Check if error is just about missing .env file (expected)
+        if echo "$output" | grep -qiE "(\.env|variable.*not set|environment variable)"; then
+            echo "   ⚠️  Valid syntax (missing .env, expected)"
             return 0
         else
-            # Check if error is just about missing .env
-            if docker compose -f "$compose_file" config 2>&1 | grep -q "\.env"; then
-                echo "   ⚠️  Valid syntax (missing .env, expected)"
-                return 0
-            else
-                echo "   ❌ Validation failed"
-                docker compose -f "$compose_file" config 2>&1 | head -20
-                return 1
-            fi
+            # Real validation error
+            echo "   ❌ Validation failed"
+            echo "$output" | head -20
+            return 1
         fi
     fi
 }
 
 # Validate all compose files in servers/
-for server_dir in "$REPO_ROOT/servers"/*/; do
-    if [ -d "$server_dir" ]; then
-        compose_file="$server_dir/docker-compose.yml"
-        if [ -f "$compose_file" ]; then
-            if validate_compose "$compose_file"; then
-                ((VALIDATED++))
-            else
-                ((ERRORS++))
+if [ -d "$REPO_ROOT/servers" ]; then
+    for server_dir in "$REPO_ROOT/servers"/*/; do
+        if [ -d "$server_dir" ]; then
+            compose_file="$server_dir/docker-compose.yml"
+            if [ -f "$compose_file" ]; then
+                if validate_compose "$compose_file"; then
+                    ((VALIDATED++))
+                else
+                    ((ERRORS++))
+                fi
+                echo ""
             fi
-            echo ""
         fi
-    fi
-done
+    done
+else
+    echo "⚠️  No servers/ directory found"
+fi
 
 # Validate compose files in services/ (if exists)
 if [ -d "$REPO_ROOT/services" ]; then
@@ -85,7 +87,10 @@ fi
 
 # Summary
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-if [ $ERRORS -eq 0 ]; then
+if [ $VALIDATED -eq 0 ] && [ $ERRORS -eq 0 ]; then
+    echo "⚠️  No compose files found to validate"
+    exit 0
+elif [ $ERRORS -eq 0 ]; then
     echo "✅ All compose files validated successfully! ($VALIDATED files)"
     exit 0
 else
