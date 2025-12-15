@@ -85,6 +85,7 @@ Each server includes a `Makefile` with common operations:
 | Command | Description |
 |---------|-------------|
 | `make check` | Validate docker-compose.yml syntax (works without .env) |
+| `make config` | **Print final resolved config** (useful for debugging includes) |
 | `make dry-run` | Preview what would be deployed (no actual deploy) |
 | `make test-deploy` | **Test deploy with platform emulation** (MacBook) |
 | `make test-down` | Stop test containers after test-deploy |
@@ -233,4 +234,3 @@ Check individual server directories for details:
 ---
 
 **Next Steps:** Read the README in your target server directory for specific setup instructions.
-
