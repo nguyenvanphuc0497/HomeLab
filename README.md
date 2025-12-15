@@ -27,12 +27,14 @@ graph LR
   Proxmox -->|VM| HAOS[Home Assistant]
 ```
 
-### Repository Structure (planned)
-- `infra/` — Proxmox, network, DNS, backup IaC (Terraform/Ansible, future)
-- `services/` — Docker Compose stacks (media, tools, dashboards)
-- `runner/` — Self-hosted GitHub Actions runner setup scripts
-- `scripts/` — Bootstrap and maintenance helpers (backup, mirror sync)
-- `docs/` — Runbooks, architecture notes, incident log
+### Repository Structure
+This project follows a **[Modular Architecture](docs/en/ARCHITECTURE.md)** (Xem [Tiếng Việt](docs/vi/ARCHITECTURE.md)).
+
+- `services/` — **Reusable Service Definitions** (Docker Compose modules).
+- `servers/` — **Deployment Configurations** (Environment-specific).
+- `infra/` — Proxmox, network, DNS IaC (Terraform/Ansible, future).
+- `scripts/` — Bootstrap and maintenance helpers.
+- `docs/` — Documentation.
 
 ## 🏗️ Hardware Inventory
 
