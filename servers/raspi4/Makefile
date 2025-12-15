@@ -2,7 +2,7 @@ COMPOSE ?= docker compose
 STACK ?= docker-compose.yml
 PLATFORM ?= linux/arm64
 
-.PHONY: deploy up down pull logs ps restart check test-deploy dry-run pull-test test-down
+.PHONY: deploy up down pull logs ps restart check test-deploy dry-run pull-test test-down config
 
 deploy: pull up
 
@@ -23,6 +23,9 @@ ps:
 
 restart:
 	$(COMPOSE) -f $(STACK) restart
+
+config:
+	$(COMPOSE) -f $(STACK) config
 
 check:
 	@echo "🔍 Validating $(STACK)..."
