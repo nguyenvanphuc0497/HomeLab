@@ -11,3 +11,8 @@ services:
   dummy:
     image: alpine:latest
     command: [ "echo", "Monitoring Agent Active" ]
+
+networks:
+  monitoring:
+    name: monitoring
+    driver: bridge
