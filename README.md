@@ -192,7 +192,19 @@ This project follows a **[Modular Architecture](docs/en/ARCHITECTURE.md)** (Xem 
 2. **Environment setup:** Copy `env.example` to `.env` on each server, fill in values.
 3. **Gitea:** Deploy `services/gitea/docker-compose.yml` (once added), configure mirror from GitHub.
 4. **Runner:** Bootstrap `runner/` script to register self-hosted runner with repo org.
-5. **Deploy stacks:** `cd servers/<server> && make deploy`
+5. **Interactive Deploy:** Run `make deploy` from root and select the target server.
+
+### 🛠️ Management & Maintenance
+
+We provide an interactive CLI for common operations from the project root:
+
+| Command | Description |
+| :--- | :--- |
+| `make deploy` | **Deploy** stack to a selected server. |
+| `make down` | **Stop & Remove** stack from a selected server. |
+| `make config` | **View** final rendered docker-compose config. |
+| `make prune` | **Clean up** unused (dangling) images. |
+| `make clean-images` | **Deep Clean**: Remove all stack images (requires re-download). |
 
 ### 🔒 Security
 
