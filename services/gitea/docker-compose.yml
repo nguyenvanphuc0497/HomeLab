@@ -23,7 +23,7 @@ services:
     depends_on:
       - gitea_db
     networks:
-      - homelab-raspi5_default
+      - default
 
   gitea_db:
     image: postgres:15
@@ -36,8 +36,4 @@ services:
     volumes:
       - ./postgres:/var/lib/postgresql/data
     networks:
-      - homelab-raspi5_default
-
-networks:
-  homelab-raspi5_default:
-    external: true
+      - default
