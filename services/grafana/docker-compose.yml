@@ -1,0 +1,29 @@
+name: grafana
+
+services:
+  grafana:
+    image: grafana/grafana:latest
+    container_name: monitoring-grafana
+    restart: unless-stopped
+    volumes:
+      - grafana_data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-admin}
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_SECURITY_ALLOW_EMBEDDING=true
+      - GF_AUTH_ANONYMOUS_ENABLED=false
+    user: "472" # Grafana user ID
+    ports:
+      - "3001:3000"
+    networks:
+      - monitoring
+
+volumes:
+  grafana_data:
+
+
+networks:
+  monitoring:
+    name: monitoring
+    driver: bridge

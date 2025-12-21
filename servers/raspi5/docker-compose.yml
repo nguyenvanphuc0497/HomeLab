@@ -6,7 +6,8 @@ x-defaults: &defaults
 include:
   - ../../services/gitea/docker-compose.yml
   - ../../services/coolify/docker-compose.yml
-  - ../../services/monitoring/docker-compose.yml
+  - ../../services/prometheus/docker-compose.yml
+  - ../../services/grafana/docker-compose.yml
   - ../../services/exporters/docker-compose.yml
 
 services:
