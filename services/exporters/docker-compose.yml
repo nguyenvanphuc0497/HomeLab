@@ -10,6 +10,7 @@ services:
     pid: host
     volumes:
       - '/:/host:ro,rslave'
+    uts: host
     ports:
       - "9100:9100"
     networks:
