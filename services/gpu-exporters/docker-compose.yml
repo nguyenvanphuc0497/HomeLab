@@ -3,7 +3,7 @@ name: gpu-exporters
 services:
   # NVIDIA GPU Exporter (Official DCGM)
   nvidia-dcgm:
-    image: nvidia/dcgm-exporter:latest
+    image: nvidia/dcgm-exporter:3.3.5-3.4.1-ubuntu22.04
     container_name: monitoring-nvidia
     restart: unless-stopped
     deploy:
@@ -20,7 +20,7 @@ services:
 
   # Intel GPU Exporter (metric export for intel_gpu_top)
   intel-gpu:
-    image: ghcr.io/onedr0p/intel-gpu-exporter:latest
+    image: ghcr.io/onedr0p/intel-gpu-exporter:0.4.0
     container_name: monitoring-intel
     restart: unless-stopped
     devices:
