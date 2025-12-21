@@ -6,6 +6,8 @@
 
 # Docker
 .docker/
+**/data/
+**/postgres/
 
 # IDE
 .vscode/
