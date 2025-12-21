@@ -17,15 +17,14 @@ services:
       - "9400:9400"
     networks:
       - monitoring
-
   # Intel GPU Exporter (metric export for intel_gpu_top)
-  intel-gpu:
-    image: ghcr.io/onedr0p/intel-gpu-exporter:0.4.0
-    container_name: monitoring-intel
-    restart: unless-stopped
-    devices:
-      - /dev/dri:/dev/dri
-    ports:
-      - "9191:8080"
-    networks:
-      - monitoring
+  # intel-gpu:
+  #   image: brianredbeard/intel-gpu-exporter:latest
+  #   container_name: monitoring-intel
+  #   restart: unless-stopped
+  #   devices:
+  #     - /dev/dri:/dev/dri
+  #   ports:
+  #     - "9191:8080"
+  #   networks:
+  #     - monitoring
