@@ -35,14 +35,14 @@ sudo sh get-docker.sh
 ### 2. Environment Configuration
 
 ```bash
-cd servers/amd-ovm
+cd servers/amd-omv
 cp env.example .env
 nano .env  # Edit with your values
 ```
 
 **Required Variables:**
 ```bash
-HOSTNAME=amd-ovm
+HOSTNAME=amd-omv
 TZ=Asia/Ho_Chi_Minh
 DOMAIN_SUFFIX=.lan
 DATA_ROOT=/var/lib/docker/data  # Or /mnt/storage
@@ -106,7 +106,7 @@ GitHub Actions runner can deploy to AMD OVM VMs via:
 ```yaml
 - name: Deploy to AMD OVM VM
   run: |
-    ssh user@amd-ovm "cd /path/to/compose && make deploy"
+    ssh user@amd-omv "cd /path/to/compose && make deploy"
 ```
 
 ## 🛠️ Management Commands

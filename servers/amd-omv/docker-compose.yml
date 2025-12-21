@@ -1,4 +1,4 @@
-name: homelab-amd-ovm
+name: homelab-amd-omv
 
 x-defaults: &defaults
   restart: unless-stopped
