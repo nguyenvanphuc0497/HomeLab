@@ -25,7 +25,13 @@ if [ ${#options[@]} -eq 0 ]; then
     exit 1
 fi
 
+# Get system info
+HOST_NAME=$(hostname)
+OS_INFO=$(uname -sm)
+CURRENT_USER=$(whoami)
+
 echo "🔧 Action: $COMMAND"
+echo "💻 System: $HOST_NAME ($OS_INFO) | User: $CURRENT_USER"
 echo "🚀 Select a server:"
 echo "---------------------------"
 
