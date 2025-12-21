@@ -1,0 +1,31 @@
+name: gpu-exporters
+
+services:
+  # NVIDIA GPU Exporter (Official DCGM)
+  nvidia-dcgm:
+    image: nvidia/dcgm-exporter:latest
+    container_name: monitoring-nvidia
+    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [ gpu ]
+    ports:
+      - "9400:9400"
+    networks:
+      - monitoring
+
+  # Intel GPU Exporter (metric export for intel_gpu_top)
+  intel-gpu:
+    image: ghcr.io/onedr0p/intel-gpu-exporter:latest
+    container_name: monitoring-intel
+    restart: unless-stopped
+    devices:
+      - /dev/dri:/dev/dri
+    ports:
+      - "9191:8080"
+    networks:
+      - monitoring

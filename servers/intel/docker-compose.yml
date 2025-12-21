@@ -5,6 +5,7 @@ x-defaults: &defaults
 
 include:
   - ../../services/exporters/docker-compose.yml
+  - ../../services/gpu-exporters/docker-compose.yml
 
 services:
   # Placeholder for Intel specific services if needed

@@ -16,3 +16,8 @@ scrape_configs:
     scrape_interval: 5s
     static_configs:
       - targets: ['cadvisor:8080', 'omv-node:8180', 'intel-node:8180']
+
+  - job_name: 'gpu_exporter'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['intel-node:9400', 'intel-node:9191']
