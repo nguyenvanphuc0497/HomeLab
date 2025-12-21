@@ -3,13 +3,14 @@ name: homelab-raspi4
 x-defaults: &defaults
   restart: unless-stopped
 
+include:
+  - ../../services/gitea/docker-compose.yml
+
 services:
-  placeholder:
+  # Main entry point for this node
+  # Additional node-specific services can be defined here if needed
+  node-agent:
     <<: *defaults
-    env_file:
-      - .env
     image: alpine:latest
-    platform: linux/arm64
-    command: ["/bin/sh", "-c", "sleep infinity"]
-    # TODO: replace with services pinned for Raspberry Pi 4 (arm64)
+    command: ["/bin/sh", "-c", "echo 'Node active' && sleep infinity"]
 

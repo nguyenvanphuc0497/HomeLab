@@ -85,6 +85,7 @@ Each server includes a `Makefile` with common operations:
 | Command | Description |
 |---------|-------------|
 | `make check` | Validate docker-compose.yml syntax (works without .env) |
+| `make config` | **Print final resolved config** (useful for debugging includes) |
 | `make dry-run` | Preview what would be deployed (no actual deploy) |
 | `make test-deploy` | **Test deploy with platform emulation** (MacBook) |
 | `make test-down` | Stop test containers after test-deploy |
@@ -186,25 +187,25 @@ Compose files use `platform: linux/amd64` or omit platform (defaults to host).
 
 ## 📝 Adding a New Service
 
-1. Edit `docker-compose.yml` in the target server directory
-2. Add service definition with appropriate `platform` tag
-3. Reference environment variables from `.env` using `${VAR_NAME}`
-4. Update `env.example` if new variables are needed
-5. Test with `make check` before deploying
 
-Example:
+### 1. Define the Service (Once)
+
+Create `services/<name>/docker-compose.yml`. This file should be **architecture-independent** if possible.
+
+### 2. Add to Server (Usage)
+
+In `servers/<server>/docker-compose.yml`, just **include** it:
+
 ```yaml
-services:
-  my-service:
-    image: myimage:latest
-    platform: linux/arm64  # Match your server architecture
-    env_file:
-      - .env
-    environment:
-      - MY_VAR=${MY_VAR_FROM_ENV}
-    volumes:
-      - ${DATA_ROOT}/my-service:/data
+include:
+  - ../../services/new-service/docker-compose.yml
 ```
+
+### 3. Configure Env
+
+Add necessary variables to `servers/<server>/env.example` and your local `.env`.
+
+This keeps server manifests clean and services reusable!
 
 ## 🔄 CI/CD Integration
 
@@ -233,4 +234,3 @@ Check individual server directories for details:
 ---
 
 **Next Steps:** Read the README in your target server directory for specific setup instructions.
-

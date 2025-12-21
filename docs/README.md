@@ -15,10 +15,12 @@ Choose your preferred language above or browse the directories directly.
 
 ### English (`/en/`)
 - [CI/CD Reports Guide](./en/CI-CD-REPORTS.md) - How to view and understand CI/CD reports
+- [Architecture Design](./en/ARCHITECTURE.md) - Understanding the "Services vs Servers" design
 - More documentation coming soon...
 
 ### Tiếng Việt (`/vi/`)
 - [Hướng dẫn CI/CD Reports](./vi/CI-CD-REPORTS.md) - Cách xem và hiểu các báo cáo CI/CD
+- [Kiến trúc Hệ thống](./vi/ARCHITECTURE.md) - Hiểu về thiết kế "Services vs Servers"
 - Thêm tài liệu sẽ được bổ sung...
 
 ## 🗂️ Documentation Structure

@@ -7,9 +7,63 @@
 > "The cloud is just someone else's computer." - Welcome to **my** computer.
 
 ## 📖 About
+
 This repository hosts the **Infrastructure as Code (IaC)** configuration for my personal HomeLab. The project aims to achieve data sovereignty, practice DevOps workflows (CI/CD), and manage Smart Home services efficiently.
 
 ### Workflow & Architecture
+
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#ffcc00', 'edgeLabelBackground':'#ffffff', 'tertiaryColor': '#f4f4f4'}}}%%
+graph TD
+    subgraph UserLayer [💻 USER DEVICES]
+        User([📱 Mobile / 💻 Laptop])
+    end
+
+    subgraph NetworkLayer [🌐 NETWORK]
+        CF(☁️ Cloudflare)
+        WG(🛡️ WireGuard)
+        PiHole(🚫 Pi-hole)
+    end
+
+    subgraph ComputeLayer [⚙️ COMPUTE NODES]
+        direction TB
+        subgraph Pi4 [🍓 Pi model 4]
+            Gitea(😸 Gitea)
+            Runner(🐙 Runner)
+            Vault(🔐 Vault)
+        end
+        
+        subgraph Pi5 [🍓 Pi model 5]
+            Plex(🎬 Plex)
+            Immich(📷 Immich)
+        end
+
+        subgraph NUC [🖥️ Intel NUC]
+            HA(🏠 Home Assistant)
+        end
+    end
+
+    User ==> CF
+    User ==> WG
+    
+    CF --> Pi4
+    CF --> Pi5
+    CF --> NUC
+    
+    WG --> PiHole
+    PiHole -.-> Pi4
+    PiHole -.-> Pi5
+    PiHole -.-> NUC
+
+    classDef primary fill:#2496ED,stroke:#fff,stroke-width:2px,color:#fff;
+    classDef secondary fill:#32936F,stroke:#fff,stroke-width:2px,color:#fff;
+    classDef user fill:#6f42c1,stroke:#fff,stroke-width:2px,color:#fff;
+
+    class Pi4,Pi5,NUC primary;
+    class Gitea,Runner,Vault,Plex,Immich,HA secondary;
+    class User user;
+```
+
 This lab operates on a **Hybrid GitOps** model:
 1. **Source of Truth:** Code is version-controlled on **GitHub**.
 2. **Backup Strategy:** Automated mirroring to a self-hosted **Gitea** instance (running on Raspberry Pi 4).
@@ -27,12 +81,14 @@ graph LR
   Proxmox -->|VM| HAOS[Home Assistant]
 ```
 
-### Repository Structure (planned)
-- `infra/` — Proxmox, network, DNS, backup IaC (Terraform/Ansible, future)
-- `services/` — Docker Compose stacks (media, tools, dashboards)
-- `runner/` — Self-hosted GitHub Actions runner setup scripts
-- `scripts/` — Bootstrap and maintenance helpers (backup, mirror sync)
-- `docs/` — Runbooks, architecture notes, incident log
+### Repository Structure
+This project follows a **[Modular Architecture](docs/en/ARCHITECTURE.md)** (Xem [Tiếng Việt](docs/vi/ARCHITECTURE.md)).
+
+- `services/` — **Reusable Service Definitions** (Docker Compose modules).
+- `servers/` — **Deployment Configurations** (Environment-specific).
+- `infra/` — Proxmox, network, DNS IaC (Terraform/Ansible, future).
+- `scripts/` — Bootstrap and maintenance helpers.
+- `docs/` — Documentation.
 
 ## 🏗️ Hardware Inventory
 
@@ -44,34 +100,43 @@ graph LR
 | **Raspberry Pi 3** | Management Node     | 1GB RAM           | Ubuntu Server  | Gitea, **GitHub Runner**, Reverse Proxy |
 | **PC Desktop**     | Workstation         | Core i5, 16GB RAM | Ubuntu / Win10 | Development, AI Training, Staging       |
 
-## 🚀 Roadmap
-### Phase 1: Foundation 🚧
-- [x] Initialize `homelab` repository on GitHub.
-- [ ] Configure **SSH key pairs** for passwordless ops between nodes (Pi4, Pi5, NUC).
-- [ ] Deploy **Gitea** on Raspberry Pi 4 (Docker Compose).
-- [ ] Setup **repo mirroring** (GitHub -> Gitea) + scheduled sync.
+## 🗺️ Roadmap
 
-### Phase 2: Automation Pipelines ⚙️
-- [ ] Provision **GitHub Actions self-hosted runner** on Raspberry Pi 4.
-- [ ] Add `deploy.yml`:
-  - [ ] Trigger on push to `main`.
-  - [ ] SSH to Pi5 via runner, pull repo, run `docker compose` updates.
-  - [ ] Post-deploy smoke check (container health or HTTP 200).
 
-### Phase 3: Migration & Standardization 📦
-- [ ] Audit existing containers on Pi5.
-- [ ] Convert ad-hoc `docker run` to `docker-compose.yml` under `services/`.
-- [ ] Add env/secret handling (`.env` template + sops/age for secrets).
-- [ ] Version Home Assistant configuration (sensitive data excluded/encrypted).
+### 🏗️ Infrastructure & Foundation
 
-### Phase 4: Monitoring & Security 🛡️
-- [ ] Deploy **Uptime Kuma** to watch critical services.
-- [ ] Centralized dashboard (Homepage/Heimdall) with links/status.
-- [ ] Alerts to Telegram/Discord for build failures and health checks.
-- [ ] Baseline hardening: SSH config, fail2ban/ufw, periodic backup verify.
+| Status | High-level Goals | Implementation Notes | ETA |
+| :---: | :--- | :--- | :---: |
+| ✅ | **Project Init** | GitHub Repo, Directory Structure, Makefile | Q4 2024 |
+| ✅ | **SSH Config** | Passwordless setup for Pi4, Pi5, NUC | Q4 2024 |
+| ✅ | **Gitea Service** | `services/gitea`, deployed on Raspberry Pi 4 | Q4 2024 |
+| 🚧 | **Automation** | GitHub Actions Self-Hosted Runner | Q1 2025 |
+| 🚧 | **Woodpecker CI** | CI/CD Pipelines for Gitea (Internal) | Q1 2025 |
+| 📅 | **Backup** | Repo mirroring (GitHub <-> Gitea) | Q1 2025 |
+| ✅ | **Connectivity** | Cloudflare DNS + Tunnel (Zero Trust) | Q4 2024 |
 
-### Phase 5: Observability (stretch) 📊
-- [ ] Metrics/logs pipeline (Prometheus/Grafana or lightweight alternative).
+### 🛠️ Services & Applications
+
+| Status | Service | Purpose | Host |
+| :---: | :--- | :--- | :--- |
+| 🚧 | **Pi-hole / AdGuard** | DNS Sinkhole & DHCP | Pi4 |
+| 📅 | **OpenMediaVault** | NAS & Storage Management | OVM |
+| 📅 | **Home Assistant** | Smart Home Core (Migration) | NUC |
+| 📅 | **Plex / Jellyfin** | Media Server | Pi5 |
+| 📅 | **Immich** | Self-hosted Google Photos alternative | OVM |
+| 📅 | **Vaultwarden** | Password Manager | Pi4 |
+
+### 🛡️ Security & Observability
+
+| Status | Feature | Notes |
+| :---: | :--- | :--- |
+| 📅 | **Monitoring Stack** | Uptime Kuma, Grafana, Prometheus, Loki |
+| 📅 | **Secrets Management** | Integrating `sops` + `age` for .env encryption |
+| 📅 | **Reverse Proxy** | Nginx Proxy Manager / Caddy with Auto-SSL |
+| 📅 | **VPN / Remote Access** | Tailscale or WireGuard |
+
+**Legend:** ✅ Done | 🚧 In Progress | 📅 Planned | ⏸️ On Hold
+
 - [ ] Long-term retention for key logs/metrics on cheap storage.
 
 ## 🚦 Getting Started
@@ -129,6 +194,30 @@ graph LR
 4. **Runner:** Bootstrap `runner/` script to register self-hosted runner with repo org.
 5. **Deploy stacks:** `cd servers/<server> && make deploy`
 
+### 🔒 Security
+
+*   Use **SSH Keys** only (Password auth disabled).
+*   Run containers with non-root users (`PUID=1000`, `PGID=1000`) where possible.
+*   **Secrets Management:** Do not commit `.env` files. Use `env.example` templates.
+*   Keep `make validate` green before pushing.
+
+### 🎥 Demo (Optional)
+
+*Placeholder for GIFs/Screenshots of diagrams or terminal usage.*
+
+## 🤝 Contributing
+
+1.  Fork the repo.
+2.  Create a feature branch (`git checkout -b feature/amazing-feature`).
+3.  Commit changes (`git commit -m 'Add amazing feature'`).
+4.  Push to branch (`git push origin feature/amazing-feature`).
+5.  Open a Pull Request.
+
+## 📜 License
+
+Distributed under the MIT License. See `LICENSE` for more information.
+
+
 ## 🔒 Security & Secrets
 - Store CI secrets in GitHub Actions secrets; avoid committing plaintext.
 - Prefer **sops + age** for encrypting `.env` / YAML values in Git.
@@ -142,11 +231,12 @@ graph LR
 
 ## 🛠️ Tech Stack
 
-* **Virtualization:** Proxmox VE
-* **Containerization:** Docker, Docker Compose
-* **CI/CD:** GitHub Actions (Self-hosted Runner)
-* **SCM:** GitHub (Primary), Gitea (Backup Mirror)
-* **OS:** Ubuntu Server LTS, Home Assistant OS
+| Domain | Technologies |
+| :--- | :--- |
+| **Infrastructure** | ![Proxmox](https://img.shields.io/badge/Proxmox-E57000?style=flat-square&logo=proxmox&logoColor=white) ![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white) ![Linux](https://img.shields.io/badge/Linux-FCC624?style=flat-square&logo=linux&logoColor=black) |
+| **CI/CD & GitOps** | ![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=flat-square&logo=github-actions&logoColor=white) ![Woodpecker](https://img.shields.io/badge/Woodpecker_CI-32936F?style=flat-square&logo=woodpecker&logoColor=white) ![Gitea](https://img.shields.io/badge/Gitea-34495E?style=flat-square&logo=gitea&logoColor=white) |
+| **Networking** | ![Cloudflare](https://img.shields.io/badge/Cloudflare-F38020?style=flat-square&logo=cloudflare&logoColor=white) ![WireGuard](https://img.shields.io/badge/WireGuard-88171A?style=flat-square&logo=wireguard&logoColor=white) ![Pi-hole](https://img.shields.io/badge/Pi--hole-96060C?style=flat-square&logo=pi-hole&logoColor=white) |
+| **Observability** | ![Grafana](https://img.shields.io/badge/Grafana-F46800?style=flat-square&logo=grafana&logoColor=white) ![Prometheus](https://img.shields.io/badge/Prometheus-E6522C?style=flat-square&logo=prometheus&logoColor=white) ![Uptime Kuma](https://img.shields.io/badge/Uptime_Kuma-58D68D?style=flat-square&logo=uptime-kuma&logoColor=white) |
 
 ---
 *Maintained by [NguyenVanPhuc]*
