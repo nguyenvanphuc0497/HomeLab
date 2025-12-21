@@ -5,7 +5,6 @@ x-defaults: &defaults
 
 include:
   - ../../services/exporters/docker-compose.yml
-  - ../../services/prometheus/docker-compose.yml
 
 services:
   # Placeholder for AMD OMV specific services (e.g. file browser, etc.) if needed in future
