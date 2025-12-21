@@ -12,6 +12,8 @@ services:
       - '/:/host:ro,rslave'
     ports:
       - "9100:9100"
+    networks:
+      - monitoring
 
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:latest
@@ -30,8 +32,3 @@ services:
       - "8180:8080"
     networks:
       - monitoring
-
-networks:
-  monitoring:
-    name: monitoring
-    driver: bridge

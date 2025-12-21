@@ -15,7 +15,7 @@ services:
       - GF_AUTH_ANONYMOUS_ENABLED=false
     user: "472" # Grafana user ID
     ports:
-      - "3001:3000"
+      - "3002:3000"
     networks:
       - monitoring
 
@@ -23,7 +23,3 @@ volumes:
   grafana_data:
 
 
-networks:
-  monitoring:
-    name: monitoring
-    driver: bridge

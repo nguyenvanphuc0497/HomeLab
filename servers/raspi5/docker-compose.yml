@@ -17,3 +17,8 @@ services:
     <<: *defaults
     image: alpine:latest
     command: [ "/bin/sh", "-c", "echo 'Node active' && sleep infinity" ]
+
+networks:
+  monitoring:
+    name: monitoring
+    driver: bridge

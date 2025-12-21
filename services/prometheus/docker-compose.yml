@@ -15,7 +15,7 @@ services:
       - '--web.console.templates=/etc/prometheus/consoles'
       - '--web.enable-lifecycle'
     ports:
-      - "9090:9090"
+      - "9190:9090"
     networks:
       - monitoring
 
@@ -23,7 +23,3 @@ volumes:
   prometheus_data:
 
 
-networks:
-  monitoring:
-    name: monitoring
-    driver: bridge
