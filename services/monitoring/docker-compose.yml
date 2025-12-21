@@ -18,6 +18,7 @@ services:
       - "9190:9090"
     extra_hosts:
       - "omv-node:${NODE_OMV_IP}"
+      - "intel-node:${NODE_INTEL_IP}"
     networks:
       - monitoring
 

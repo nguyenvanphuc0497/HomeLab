@@ -29,6 +29,7 @@ services:
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
       - /dev/disk/:/dev/disk:ro
+    uts: host
     ports:
       - "8180:8080"
     networks:
