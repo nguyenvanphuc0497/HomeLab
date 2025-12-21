@@ -16,6 +16,8 @@ services:
       - '--web.enable-lifecycle'
     expose:
       - 9090
+    extra_hosts:
+      - "amd-omv:${AMD_OMV_IP}"
     networks:
       - monitoring
 
