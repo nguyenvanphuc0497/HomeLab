@@ -10,7 +10,7 @@ servers/
 ├── raspi4/          # Raspberry Pi 4 (arm64, 4GB RAM) - Management Node
 ├── raspi5/          # Raspberry Pi 5 (arm64, 4GB RAM) - Compute Node
 ├── intel-nuc/       # Intel NUC (amd64, 8GB RAM) - Virtualization Host
-└── amd-ovm/         # AMD OVM (amd64) - Virtualization Host
+└── amd-omv/         # AMD OMV (amd64) - Virtualization Host
 ```
 
 Each server directory contains:
@@ -229,7 +229,7 @@ Check individual server directories for details:
 - [`raspi4/README.md`](./raspi4/README.md)
 - [`raspi5/README.md`](./raspi5/README.md)
 - [`intel-nuc/README.md`](./intel-nuc/README.md)
-- [`amd-ovm/README.md`](./amd-ovm/README.md)
+- [`amd-omv/README.md`](./amd-omv/README.md)
 
 ---
 

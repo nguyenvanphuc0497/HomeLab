@@ -59,6 +59,21 @@ lint: lint-markdown lint-yaml
 test: validate lint
 	@echo "✅ All tests passed"
 
+deploy:
+	@bash scripts/manage.sh deploy
+
+down:
+	@bash scripts/manage.sh down
+
+config:
+	@bash scripts/manage.sh config
+
+prune:
+	@bash scripts/manage.sh prune
+
+clean-images:
+	@bash scripts/manage.sh clean
+
 clean:
 	@echo "🧹 Cleaning temporary files..."
 	@find . -type f -name "*.swp" -delete

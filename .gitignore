@@ -6,6 +6,9 @@
 
 # Docker
 .docker/
+**/data/
+**/postgres/
+services/monitoring/grafana/data/
 
 # IDE
 .vscode/
