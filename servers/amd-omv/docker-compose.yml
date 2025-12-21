@@ -1,0 +1,13 @@
+name: homelab-amd-ovm
+
+x-defaults: &defaults
+  restart: unless-stopped
+
+include:
+  - ../../services/exporters/docker-compose.yml
+
+services:
+  # Placeholder for AMD OMV specific services (e.g. file browser, etc.) if needed in future
+  dummy:
+    image: alpine:latest
+    command: [ "echo", "Monitoring Agent Active" ]

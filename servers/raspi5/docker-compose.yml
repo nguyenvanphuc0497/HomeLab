@@ -7,6 +7,7 @@ include:
   - ../../services/gitea/docker-compose.yml
   - ../../services/coolify/docker-compose.yml
   - ../../services/monitoring/docker-compose.yml
+  - ../../services/exporters/docker-compose.yml
 
 services:
   # Main entry point for this node (Raspberry Pi 5)
