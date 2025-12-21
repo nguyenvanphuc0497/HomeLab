@@ -32,6 +32,7 @@ make deploy
 3.  Enter ID **1860** (Node Exporter Full) and click **Load**.
 4.  Select `Prometheus` as the data source.
 5.  Click **Import**.
+6.  *(Optional)* For Docker Container monitoring (cAdvisor), import ID **14282**.
 
 ### Data Persistence
 *   Prometheus data is stored in Docker volume `monitoring_prometheus_data`.
