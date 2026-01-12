@@ -72,6 +72,12 @@ fi
 if [ -d "$REPO_ROOT/services" ]; then
     for service_dir in "$REPO_ROOT/services"/*/; do
         if [ -d "$service_dir" ]; then
+            # Skip if .validateignore exists
+            if [ -f "$service_dir/.validateignore" ]; then
+                echo "⏩ Skipping module: $(basename "$service_dir") (.validateignore found)"
+                continue
+            fi
+
             compose_file="$service_dir/docker-compose.yml"
             if [ -f "$compose_file" ]; then
                 if validate_compose "$compose_file"; then

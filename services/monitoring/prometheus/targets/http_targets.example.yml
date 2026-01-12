@@ -1,0 +1,4 @@
+- targets:
+    - http://gitea:3000
+    - http://grafana:3000
+    - https://google.com

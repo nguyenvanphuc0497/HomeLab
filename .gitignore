@@ -6,6 +6,9 @@
 
 # Docker
 .docker/
+**/data/
+**/postgres/
+services/monitoring/grafana/data/
 
 # IDE
 .vscode/
@@ -53,3 +56,7 @@ id_rsa*
 # Local test files
 test-local/
 .local/
+
+# Prometheus Secret Targets
+services/monitoring/prometheus/targets/*.yml
+!services/monitoring/prometheus/targets/*.example.yml
