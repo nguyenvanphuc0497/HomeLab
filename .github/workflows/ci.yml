@@ -98,7 +98,7 @@ jobs:
     needs: [compose-validate]
     strategy:
       matrix:
-        server: [raspi3, raspi4, raspi5, intel-nuc, amd-ovm]
+        server: [raspi3, raspi4, raspi5, intel, amd-omv]
     steps:
       - uses: actions/checkout@v4
       - name: Install Docker Compose
