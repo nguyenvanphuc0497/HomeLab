@@ -9,6 +9,7 @@
 
 Raspberry Pi 5 is the **primary compute node** for production workloads. It hosts user-facing services and media applications:
 
+- **VPN Access** - WG-Easy (WireGuard VPN with Web UI)
 - **Media Servers** - Plex, Jellyfin, or similar
 - **Download Clients** - qBittorrent, Transmission
 - **File Management** - Filebrowser, Samba
@@ -60,6 +61,13 @@ MEDIA_ROOT=/mnt/usb-ssd/media
 TORRENTS_DIR=/mnt/usb-ssd/torrents
 ```
 
+**WG-Easy VPN Variables (required for VPN):**
+```bash
+WG_HOST=vpn.yourdomain.com  # Your public IP or domain
+WG_ADMIN_PASSWORD=your-secure-password  # Web UI password
+WG_DEFAULT_DNS=1.1.1.1  # DNS for VPN clients (optional)
+```
+
 ### 3. Deploy
 
 ```bash
@@ -68,6 +76,13 @@ make deploy  # Pull images and start services
 ```
 
 ## 📦 Recommended Services
+
+### VPN & Remote Access
+
+- **WG-Easy** - WireGuard VPN with web UI for secure remote access
+  - Web UI: `http://<raspi5-ip>:51821`
+  - VPN Port: UDP 51820
+  - See [`../../services/wg-easy/README.md`](../../services/wg-easy/README.md) for setup guide
 
 ### Media Stack
 

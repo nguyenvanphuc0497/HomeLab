@@ -8,6 +8,7 @@ include:
   - ../../services/coolify/docker-compose.yml
   - ../../services/monitoring/docker-compose.yml
   - ../../services/exporters/docker-compose.yml
+  - ../../services/wg-easy/docker-compose.yml
 
 services:
   # Main entry point for this node (Raspberry Pi 5)
