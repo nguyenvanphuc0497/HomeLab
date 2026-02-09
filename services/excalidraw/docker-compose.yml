@@ -1,0 +1,14 @@
+name: excalidraw
+
+services:
+  excalidraw:
+    image: excalidraw/excalidraw:sha-4bfc5bb
+    container_name: excalidraw
+    restart: unless-stopped
+
+    ports:
+      # Web UI port
+      - "8092:80"
+
+    networks:
+      - default

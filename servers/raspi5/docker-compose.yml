@@ -9,6 +9,9 @@ include:
   - ../../services/monitoring/docker-compose.yml
   - ../../services/exporters/docker-compose.yml
   - ../../services/wg-easy/docker-compose.yml
+  - ../../services/stirling-pdf/docker-compose.yml
+  - ../../services/it-tools/docker-compose.yml
+  - ../../services/excalidraw/docker-compose.yml
 
 services:
   # Main entry point for this node (Raspberry Pi 5)

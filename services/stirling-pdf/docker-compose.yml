@@ -1,0 +1,25 @@
+name: stirling-pdf
+
+services:
+  stirling-pdf:
+    image: stirlingtools/stirling-pdf:2.4.5
+    container_name: stirling-pdf
+    restart: unless-stopped
+
+    environment:
+      # Optional: Timezone
+      - TZ=${TZ}
+
+    ports:
+      # Web UI port
+      - "8090:8080"
+
+    volumes:
+      # Persistent storage for configurations
+      - stirling_data:/configs
+
+    networks:
+      - default
+
+volumes:
+  stirling_data:

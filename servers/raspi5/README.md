@@ -10,10 +10,10 @@
 Raspberry Pi 5 is the **primary compute node** for production workloads. It hosts user-facing services and media applications:
 
 - **VPN Access** - WG-Easy (WireGuard VPN with Web UI)
+- **Productivity Tools** - Stirling PDF, IT-Tools, Excalidraw
 - **Media Servers** - Plex, Jellyfin, or similar
 - **Download Clients** - qBittorrent, Transmission
 - **File Management** - Filebrowser, Samba
-- **Productivity Tools** - Nextcloud, Calibre
 - **Self-hosted Apps** - Various Docker services
 
 ## 🏗️ Architecture
@@ -96,6 +96,18 @@ make deploy  # Pull images and start services
 - **Filebrowser** - Web-based file manager
 - **Samba** - SMB/CIFS shares for Windows/Mac
 - **SFTP** - Secure file transfer
+
+### Productivity Tools
+
+- **Stirling PDF** - PDF manipulation and conversion
+  - Web UI: `http://<raspi5-ip>:8090`
+  - See [`../../services/stirling-pdf/README.md`](../../services/stirling-pdf/README.md)
+- **IT-Tools** - Developer utilities collection
+  - Web UI: `http://<raspi5-ip>:8091`
+  - See [`../../services/it-tools/README.md`](../../services/it-tools/README.md)
+- **Excalidraw** - Virtual whiteboard for diagrams
+  - Web UI: `http://<raspi5-ip>:8092`
+  - See [`../../services/excalidraw/README.md`](../../services/excalidraw/README.md)
 
 ### Self-hosted Apps
 
