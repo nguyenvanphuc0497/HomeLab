@@ -68,7 +68,12 @@ if [ -f "Makefile" ]; then
     else
         echo "⚠️  Makefile found but target '$COMMAND' missing. Falling back to Docker Compose."
         case $COMMAND in
-            deploy) docker compose up -d --remove-orphans --pull always ;;
+            deploy) 
+                echo "📥 Pulling latest images..."
+                docker compose pull
+                echo "🚀 Starting services (recreating only changed containers)..."
+                docker compose up -d --remove-orphans
+                ;;
             down)   docker compose down ;;
             config) docker compose config ;;
             prune)  docker image prune -f ;;
@@ -79,7 +84,12 @@ if [ -f "Makefile" ]; then
 elif [ -f "docker-compose.yml" ]; then
     echo "⚠️  No Makefile found. Running direct docker compose..."
     case $COMMAND in
-        deploy) docker compose up -d --remove-orphans --pull always ;;
+        deploy) 
+            echo "📥 Pulling latest images..."
+            docker compose pull
+            echo "🚀 Starting services (recreating only changed containers)..."
+            docker compose up -d --remove-orphans
+            ;;
         down)   docker compose down ;;
         config) docker compose config ;;
         prune)  docker image prune -f ;;
