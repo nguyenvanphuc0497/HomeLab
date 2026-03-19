@@ -10,6 +10,7 @@
 Raspberry Pi 5 is the **primary compute node** for production workloads. It hosts user-facing services and media applications:
 
 - **VPN Access** - WG-Easy (WireGuard VPN with Web UI)
+- **Smart Home** - Homebridge (Apple HomeKit integration)
 - **Productivity Tools** - Stirling PDF, IT-Tools, Excalidraw
 - **Media Servers** - Plex, Jellyfin, or similar
 - **Download Clients** - qBittorrent, Transmission
@@ -83,6 +84,13 @@ make deploy  # Pull images and start services
   - Web UI: `http://<raspi5-ip>:51821`
   - VPN Port: UDP 51820
   - See [`../../services/wg-easy/README.md`](../../services/wg-easy/README.md) for setup guide
+
+### Smart Home
+
+- **Homebridge** - Apple HomeKit integration for smart home devices
+  - Web UI: `http://<raspi5-ip>:8581`
+  - HomeKit Port: TCP 51826
+  - See [`../../services/homebridge/README.md`](../../services/homebridge/README.md) for setup guide
 
 ### Media Stack
 
