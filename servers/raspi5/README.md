@@ -9,10 +9,12 @@
 
 Raspberry Pi 5 is the **primary compute node** for production workloads. It hosts user-facing services and media applications:
 
+- **VPN Access** - WG-Easy (WireGuard VPN with Web UI)
+- **Smart Home** - Homebridge (Apple HomeKit integration)
+- **Productivity Tools** - Stirling PDF, IT-Tools, Excalidraw
 - **Media Servers** - Plex, Jellyfin, or similar
 - **Download Clients** - qBittorrent, Transmission
 - **File Management** - Filebrowser, Samba
-- **Productivity Tools** - Nextcloud, Calibre
 - **Self-hosted Apps** - Various Docker services
 
 ## 🏗️ Architecture
@@ -60,6 +62,13 @@ MEDIA_ROOT=/mnt/usb-ssd/media
 TORRENTS_DIR=/mnt/usb-ssd/torrents
 ```
 
+**WG-Easy VPN Variables (required for VPN):**
+```bash
+WG_HOST=vpn.yourdomain.com  # Your public IP or domain
+WG_ADMIN_PASSWORD=your-secure-password  # Web UI password
+WG_DEFAULT_DNS=1.1.1.1  # DNS for VPN clients (optional)
+```
+
 ### 3. Deploy
 
 ```bash
@@ -68,6 +77,20 @@ make deploy  # Pull images and start services
 ```
 
 ## 📦 Recommended Services
+
+### VPN & Remote Access
+
+- **WG-Easy** - WireGuard VPN with web UI for secure remote access
+  - Web UI: `http://<raspi5-ip>:51821`
+  - VPN Port: UDP 51820
+  - See [`../../services/wg-easy/README.md`](../../services/wg-easy/README.md) for setup guide
+
+### Smart Home
+
+- **Homebridge** - Apple HomeKit integration for smart home devices
+  - Web UI: `http://<raspi5-ip>:8581`
+  - HomeKit Port: TCP 51826
+  - See [`../../services/homebridge/README.md`](../../services/homebridge/README.md) for setup guide
 
 ### Media Stack
 
@@ -81,6 +104,18 @@ make deploy  # Pull images and start services
 - **Filebrowser** - Web-based file manager
 - **Samba** - SMB/CIFS shares for Windows/Mac
 - **SFTP** - Secure file transfer
+
+### Productivity Tools
+
+- **Stirling PDF** - PDF manipulation and conversion
+  - Web UI: `http://<raspi5-ip>:8090`
+  - See [`../../services/stirling-pdf/README.md`](../../services/stirling-pdf/README.md)
+- **IT-Tools** - Developer utilities collection
+  - Web UI: `http://<raspi5-ip>:8091`
+  - See [`../../services/it-tools/README.md`](../../services/it-tools/README.md)
+- **Excalidraw** - Virtual whiteboard for diagrams
+  - Web UI: `http://<raspi5-ip>:8092`
+  - See [`../../services/excalidraw/README.md`](../../services/excalidraw/README.md)
 
 ### Self-hosted Apps
 

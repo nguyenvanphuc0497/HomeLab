@@ -4,10 +4,22 @@ x-defaults: &defaults
   restart: unless-stopped
 
 include:
-  - ../../services/gitea/docker-compose.yml
-  - ../../services/coolify/docker-compose.yml
-  - ../../services/monitoring/docker-compose.yml
-  - ../../services/exporters/docker-compose.yml
+  # VPN
+  - path: ../../services/wg-easy/docker-compose.yml
+
+  # Smart Home
+  - path: ../../services/homebridge/docker-compose.yml
+
+  # Development & Deployment
+  - path: ../../services/gitea/docker-compose.yml
+  - path: ../../services/coolify/docker-compose.yml
+  - path: ../../services/stirling-pdf/docker-compose.yml
+  - path: ../../services/it-tools/docker-compose.yml
+  - path: ../../services/excalidraw/docker-compose.yml
+
+  # Monitoring
+  - path: ../../services/monitoring/docker-compose.yml
+  - path: ../../services/exporters/docker-compose.yml
 
 services:
   # Main entry point for this node (Raspberry Pi 5)
